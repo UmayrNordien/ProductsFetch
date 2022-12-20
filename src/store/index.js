@@ -2,7 +2,7 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    countries: [],
+    countries: null
   },
 
 
@@ -21,18 +21,13 @@ export default createStore({
 
 
   actions: {
-    async fetchAllCountries(context) {
-      try {
-        const response = await fetch("https://restcountries.eu/rest/v2/all");
-        const data = await response.json();
-        context.commit("setCountries", data);
-      } catch (err) {
-        return console.error(err);
-      }
+    fetchAllCountries(context) {
+      return fetch("https://restcountries.eu/rest/v2/all")
+        .then((response) => response.json())
+        .then((data) => {
+          context.commit("setCountries", data.countries);
+        })
+        .catch((err) => console.error(err));
     },
   },
-
-
-  modules: {
-  }
 });
